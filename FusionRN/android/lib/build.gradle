@@ -1,6 +1,7 @@
 apply plugin: "com.android.library"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply plugin: 'com.kezong.fat-aar'
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -106,12 +107,21 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    embed project(':react-native-safe-area-context')
+    embed project(':react-native-screens')
+    // Add any other React Native dependencies your library uses
+
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
     }
+}
+
+fataar {
+    // Include all the transitive dependencies
+    transitive = true
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

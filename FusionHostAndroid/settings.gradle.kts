@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+
         google {
             content {
                 includeGroupByRegex("com\\.android.*")
@@ -9,6 +10,8 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven(url = "https://www.jitpack.io")
+        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
         flatDir {
             dirs("libs")
         }
