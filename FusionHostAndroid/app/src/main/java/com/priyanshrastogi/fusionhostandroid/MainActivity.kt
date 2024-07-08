@@ -1,53 +1,70 @@
 package com.priyanshrastogi.fusionhostandroid
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import com.facebook.react.BuildConfig
-import com.facebook.react.ReactInstanceManager
-import com.facebook.react.ReactRootView
-import com.facebook.react.common.LifecycleState
-import com.facebook.react.PackageList
-import com.facebook.soloader.SoLoader
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var reactRootView: ReactRootView
-    private lateinit var reactInstanceManager: ReactInstanceManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        SoLoader.init(this, false)
-
-        reactRootView = ReactRootView(this)
-        reactInstanceManager = ReactInstanceManager.builder()
-            .setApplication(application)
-            .setCurrentActivity(this)
-            .setBundleAssetName("index.android.bundle")
-            .setJSMainModulePath("index")
-            .addPackages(PackageList(application).packages)
-            .setUseDeveloperSupport(BuildConfig.DEBUG)
-            .setInitialLifecycleState(LifecycleState.RESUMED)
-            .build()
-
-        // Start the React Native application immediately
-        reactRootView.startReactApplication(reactInstanceManager, "FusionRN", null)
-        setContentView(reactRootView)
+        setContent{
+            MaterialTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    WelcomeScreen()
+                }
+            }
+        }
     }
 
-    override fun onPause() {
-        super.onPause()
-        reactInstanceManager.onHostPause(this)
+    @Composable
+    fun WelcomeScreen() {
+        val context = LocalContext.current
+        Column(
+            //modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Welcome to Fusion",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                text = "Android Host",
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
+            Button(onClick = {
+                context.startActivity(Intent(context, ReactNativeActivity::class.java))
+            }) {
+                Text("Run React Native")
+            }
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        reactInstanceManager.onHostResume(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        reactInstanceManager.onHostDestroy(this)
-        reactRootView.unmountReactApplication()
+    @Preview(showBackground = true)
+    @Composable
+    fun WelcomeScreenPreview() {
+        MaterialTheme {
+            WelcomeScreen()
+        }
     }
 }
